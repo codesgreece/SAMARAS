@@ -35,14 +35,14 @@ export function Navbar() {
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-all duration-500",
           solid
-            ? "nav-blur border-b border-white/10 bg-charcoal/95"
-            : "bg-transparent",
+            ? "nav-blur border-b border-white/10 bg-charcoal/92"
+            : "bg-charcoal/55 nav-blur",
         )}
       >
-        <div className="container-site flex h-[4.5rem] items-center justify-between gap-6 md:h-[5rem]">
+        <div className="container-site flex h-[4.75rem] items-center justify-between gap-4 md:h-[5.25rem] md:gap-6">
           <Link
             href="/"
-            className="relative z-50 flex shrink-0 items-center"
+            className="relative z-50 flex shrink-0 items-center bg-white px-3 py-2 md:px-3.5 md:py-2.5"
             aria-label="ΣΑΜΑΡΑΣ — Αρχική"
           >
             <Image
@@ -50,66 +50,80 @@ export function Navbar() {
               alt="ΣΑΜΑΡΑΣ"
               width={168}
               height={48}
-              className="h-9 w-auto object-contain md:h-11"
+              className="h-8 w-auto object-contain md:h-9"
               priority
             />
           </Link>
 
-          <nav className="hidden items-center gap-1 xl:flex" aria-label="Κύριο μενού">
-            {mainNav.map((item) => {
+          <nav
+            className="hidden flex-1 items-center justify-center xl:flex"
+            aria-label="Κύριο μενού"
+          >
+            {mainNav.map((item, index) => {
               const active =
                 item.href === "/"
                   ? pathname === "/"
                   : pathname === item.href || pathname.startsWith(`${item.href}/`);
 
-              if (item.children) {
-                return (
-                  <div key={item.href} className="group relative">
+              return (
+                <div key={item.href} className="flex items-center">
+                  {index > 0 ? (
+                    <span
+                      className="mx-2 h-px w-4 shrink-0 bg-white/35 lg:mx-3 lg:w-5"
+                      aria-hidden
+                    />
+                  ) : null}
+
+                  {item.children ? (
+                    <div className="group relative">
+                      <Link
+                        href={item.href}
+                        className={cn(
+                          "inline-flex items-center gap-1.5 px-1 py-2 text-[0.68rem] font-medium tracking-[0.2em] uppercase transition-colors",
+                          active
+                            ? "text-white"
+                            : "text-white/70 hover:text-white",
+                        )}
+                      >
+                        {item.label}
+                        <span className="text-[0.5rem] opacity-60">▾</span>
+                      </Link>
+                      <div className="invisible absolute left-1/2 top-full min-w-[240px] -translate-x-1/2 translate-y-2 border border-white/10 bg-graphite/98 opacity-0 shadow-2xl transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                        <div className="h-px w-full bg-brand" />
+                        {item.children.map((child) => (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            className="block border-b border-white/5 px-4 py-3 text-[0.72rem] tracking-[0.08em] text-white/75 transition-colors hover:bg-white/5 hover:text-white"
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
                     <Link
                       href={item.href}
                       className={cn(
-                        "inline-flex items-center gap-1.5 px-3 py-2 text-[0.7rem] font-semibold tracking-[0.16em] uppercase transition-colors",
+                        "px-1 py-2 text-[0.68rem] font-medium tracking-[0.2em] uppercase transition-colors",
                         active
-                          ? "text-brand"
-                          : "text-white/75 hover:text-white",
+                          ? "text-white"
+                          : "text-white/70 hover:text-white",
                       )}
                     >
                       {item.label}
-                      <span className="text-[0.55rem] opacity-70">▾</span>
                     </Link>
-                    <div className="invisible absolute left-0 top-full min-w-[240px] translate-y-2 border border-white/10 bg-graphite/98 opacity-0 shadow-2xl transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                      <div className="h-px w-full bg-brand" />
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.href}
-                          href={child.href}
-                          className="block border-b border-white/5 px-4 py-3 text-[0.72rem] tracking-[0.08em] text-white/75 transition-colors hover:bg-white/5 hover:text-white"
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                );
-              }
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "px-3 py-2 text-[0.7rem] font-semibold tracking-[0.16em] uppercase transition-colors",
-                    active ? "text-brand" : "text-white/75 hover:text-white",
                   )}
-                >
-                  {item.label}
-                </Link>
+                </div>
               );
             })}
           </nav>
 
-          <div className="hidden items-center gap-3 xl:flex">
-            <Button href="/epikoinonia#prosfora" className="!py-3 !px-5">
+          <div className="hidden shrink-0 items-center xl:flex">
+            <Button
+              href="/epikoinonia#prosfora"
+              className="!rounded-none !px-5 !py-3 !text-[0.68rem] !tracking-[0.16em]"
+            >
               Ζητήστε Προσφορά
             </Button>
           </div>
@@ -201,7 +215,7 @@ export function Navbar() {
               </div>
             ))}
           </nav>
-          <Button href="/epikoinonia#prosfora" className="mt-6 w-full">
+          <Button href="/epikoinonia#prosfora" className="mt-6 w-full !rounded-none">
             Ζητήστε Προσφορά
           </Button>
         </div>
